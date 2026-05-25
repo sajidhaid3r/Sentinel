@@ -60,18 +60,18 @@ export default function SimulationPanel() {
             </datalist>
           </div>
 
-          <SliderRow label="Population" v={population} setV={setPopulation} min={10_000} max={2_000_000_000} step={10000} fmt={v => v.toLocaleString()} />
+          <SliderRow label="Population" v={population} setV={setPopulation} min={10_000} max={2_000_000_000} step={10000} fmt={(v: number) => v.toLocaleString()} />
           <SliderRow label="Initial Infected (I₀)" v={I0} setV={setI0} min={1} max={10000} step={1} />
-          <SliderRow label="R₀ (Basic Reproduction)" v={R0} setV={setR0} min={0.5} max={18} step={0.1} fmt={v => v.toFixed(1)} />
-          <SliderRow label="Incubation (days)" v={incubation} setV={setIncubation} min={1} max={21} step={0.1} fmt={v => v.toFixed(1)} />
-          <SliderRow label="Infectious Period (days)" v={infectious} setV={setInfectious} min={1} max={30} step={0.1} fmt={v => v.toFixed(1)} />
+          <SliderRow label="R₀ (Basic Reproduction)" v={R0} setV={setR0} min={0.5} max={18} step={0.1} fmt={(v: number) => v.toFixed(1)} />
+          <SliderRow label="Incubation (days)" v={incubation} setV={setIncubation} min={1} max={21} step={0.1} fmt={(v: number) => v.toFixed(1)} />
+          <SliderRow label="Infectious Period (days)" v={infectious} setV={setInfectious} min={1} max={30} step={0.1} fmt={(v: number) => v.toFixed(1)} />
           <SliderRow label="Simulation Days" v={days} setV={setDays} min={30} max={730} step={10} />
           <div className="border-t border-border pt-4">
             <div className="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-3">Intervention (NPIs)</div>
             <SliderRow label="Start Day" v={interventionStart} setV={setInterventionStart} min={0} max={days} step={1} />
             <SliderRow label="Transmission Reduction (%)" v={interventionReduction} setV={setInterventionReduction} min={0} max={95} step={1} />
           </div>
-          <SliderRow label="National ICU Beds" v={icuBeds} setV={setIcuBeds} min={1000} max={500000} step={1000} fmt={v => v.toLocaleString()} />
+          <SliderRow label="National ICU Beds" v={icuBeds} setV={setIcuBeds} min={1000} max={500000} step={1000} fmt={(v: number) => v.toLocaleString()} />
         </div>
 
         <div className="space-y-4">
