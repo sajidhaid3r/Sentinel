@@ -56,12 +56,11 @@ export default function SimulationPanel() {
           <div className="flex items-center gap-2 mb-2"><Activity className="w-4 h-4 text-teal" /><span className="font-display">Epidemic Parameters</span></div>
 
           <div>
-            <Label>Pandemic Name</Label>
-            <Input value={pandemic} onChange={e => setPandemic(e.target.value)} list="pandemics" className="bg-[var(--input-bg)]" />
-            <datalist id="pandemics">
-              {["COVID-19", "Influenza H1N1", "Ebola", "SARS", "MERS", "Measles", "Smallpox", "Marburg"].map(n => <option key={n} value={n} />)}
-            </datalist>
+            <Label>Pandemic</Label>
+            <div className="text-sm font-mono text-teal px-3 py-2 rounded-md bg-[var(--input-bg)] border border-border">{pandemic.name}</div>
+            <div className="text-[10px] text-muted-foreground mt-1">Change pandemic from the top selector to update all tabs.</div>
           </div>
+
 
           <SliderRow label="Population" v={population} setV={setPopulation} min={10_000} max={2_000_000_000} step={10000} fmt={(v: number) => v.toLocaleString()} />
           <SliderRow label="Initial Infected (I₀)" v={I0} setV={setI0} min={1} max={10000} step={1} />
