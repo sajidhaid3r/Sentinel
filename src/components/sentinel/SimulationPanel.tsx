@@ -1,11 +1,9 @@
-import { useMemo, useState } from "react";
-import { Activity, Play, RotateCcw } from "lucide-react";
+import { useMemo, useState, useEffect } from "react";
+import { Activity } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useEpidemic } from "@/context/EpidemicContext";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart } from "recharts";
 
-// SEIR model: dS=-βSI/N, dE=βSI/N - σE, dI=σE - γI, dR=γI
 function runSEIR({ N, I0, R0, sigma, gamma, days, intervention }: any) {
   const beta = (R0 * gamma);
   let S = N - I0, E = 0, I = I0, R = 0;
@@ -25,16 +23,21 @@ function runSEIR({ N, I0, R0, sigma, gamma, days, intervention }: any) {
 }
 
 export default function SimulationPanel() {
-  const [pandemic, setPandemic] = useState("COVID-19");
+  const { pandemic } = useEpidemic();
   const [population, setPopulation] = useState(1_400_000_000);
   const [I0, setI0] = useState(100);
-  const [R0, setR0] = useState(2.5);
-  const [incubation, setIncubation] = useState(5.1);
-  const [infectious, setInfectious] = useState(7);
+  const [R0, setR0] = useState(pandemic.R0);
+  const [incubation, setIncubation] = useState(pandemic.incubation);
+  const [infectious, setInfectious] = useState(pandemic.infectious);
   const [days, setDays] = useState(180);
   const [interventionStart, setInterventionStart] = useState(30);
   const [interventionReduction, setInterventionReduction] = useState(40);
   const [icuBeds, setIcuBeds] = useState(95000);
+
+  useEffect(() => {
+    setR0(pandemic.R0); setIncubation(pandemic.incubation); setInfectious(pandemic.infectious);
+  }, [pandemic.name]);
+
 
   const data = useMemo(() => runSEIR({
     N: population, I0, R0,
@@ -53,12 +56,11 @@ export default function SimulationPanel() {
           <div className="flex items-center gap-2 mb-2"><Activity className="w-4 h-4 text-teal" /><span className="font-display">Epidemic Parameters</span></div>
 
           <div>
-            <Label>Pandemic Name</Label>
-            <Input value={pandemic} onChange={e => setPandemic(e.target.value)} list="pandemics" className="bg-[var(--input-bg)]" />
-            <datalist id="pandemics">
-              {["COVID-19", "Influenza H1N1", "Ebola", "SARS", "MERS", "Measles", "Smallpox", "Marburg"].map(n => <option key={n} value={n} />)}
-            </datalist>
+            <Label>Pandemic</Label>
+            <div className="text-sm font-mono text-teal px-3 py-2 rounded-md bg-[var(--input-bg)] border border-border">{pandemic.name}</div>
+            <div className="text-[10px] text-muted-foreground mt-1">Change pandemic from the top selector to update all tabs.</div>
           </div>
+
 
           <SliderRow label="Population" v={population} setV={setPopulation} min={10_000} max={2_000_000_000} step={10000} fmt={(v: number) => v.toLocaleString()} />
           <SliderRow label="Initial Infected (I₀)" v={I0} setV={setI0} min={1} max={10000} step={1} />
@@ -84,7 +86,7 @@ export default function SimulationPanel() {
 
           <div className="sentinel-card">
             <div className="flex items-center justify-between mb-3">
-              <div><div className="font-display">SEIR Model — {pandemic}</div><div className="text-xs font-mono text-muted-foreground">Susceptible / Exposed / Infected / Recovered</div></div>
+              <div><div className="font-display">SEIR Model — {pandemic.name}</div><div className="text-xs font-mono text-muted-foreground">Susceptible / Exposed / Infected / Recovered</div></div>
             </div>
             <ResponsiveContainer width="100%" height={300}>
               <AreaChart data={data} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
