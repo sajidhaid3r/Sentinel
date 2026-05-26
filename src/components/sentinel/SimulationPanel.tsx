@@ -86,7 +86,7 @@ export default function SimulationPanel() {
 
           <div className="sentinel-card">
             <div className="flex items-center justify-between mb-3">
-              <div><div className="font-display">SEIR Model — {pandemic}</div><div className="text-xs font-mono text-muted-foreground">Susceptible / Exposed / Infected / Recovered</div></div>
+              <div><div className="font-display">SEIR Model — {pandemic.name}</div><div className="text-xs font-mono text-muted-foreground">Susceptible / Exposed / Infected / Recovered</div></div>
             </div>
             <ResponsiveContainer width="100%" height={300}>
               <AreaChart data={data} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
