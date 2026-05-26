@@ -1,11 +1,9 @@
-import { useMemo, useState } from "react";
-import { Activity, Play, RotateCcw } from "lucide-react";
+import { useMemo, useState, useEffect } from "react";
+import { Activity } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useEpidemic } from "@/context/EpidemicContext";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart } from "recharts";
 
-// SEIR model: dS=-βSI/N, dE=βSI/N - σE, dI=σE - γI, dR=γI
 function runSEIR({ N, I0, R0, sigma, gamma, days, intervention }: any) {
   const beta = (R0 * gamma);
   let S = N - I0, E = 0, I = I0, R = 0;
@@ -25,16 +23,21 @@ function runSEIR({ N, I0, R0, sigma, gamma, days, intervention }: any) {
 }
 
 export default function SimulationPanel() {
-  const [pandemic, setPandemic] = useState("COVID-19");
+  const { pandemic } = useEpidemic();
   const [population, setPopulation] = useState(1_400_000_000);
   const [I0, setI0] = useState(100);
-  const [R0, setR0] = useState(2.5);
-  const [incubation, setIncubation] = useState(5.1);
-  const [infectious, setInfectious] = useState(7);
+  const [R0, setR0] = useState(pandemic.R0);
+  const [incubation, setIncubation] = useState(pandemic.incubation);
+  const [infectious, setInfectious] = useState(pandemic.infectious);
   const [days, setDays] = useState(180);
   const [interventionStart, setInterventionStart] = useState(30);
   const [interventionReduction, setInterventionReduction] = useState(40);
   const [icuBeds, setIcuBeds] = useState(95000);
+
+  useEffect(() => {
+    setR0(pandemic.R0); setIncubation(pandemic.incubation); setInfectious(pandemic.infectious);
+  }, [pandemic.name]);
+
 
   const data = useMemo(() => runSEIR({
     N: population, I0, R0,
