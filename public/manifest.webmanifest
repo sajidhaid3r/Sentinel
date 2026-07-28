@@ -1,0 +1,14 @@
+{
+  "name": "SENTINEL — Pandemic Intelligence Platform",
+  "short_name": "SENTINEL",
+  "description": "Offline-ready pandemic intelligence, health passport & emergency lifeline.",
+  "start_url": "/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#001012",
+  "theme_color": "#00C4CC",
+  "icons": [
+    { "src": "/favicon.ico", "sizes": "any", "type": "image/x-icon" }
+  ]
+}
